@@ -37,6 +37,7 @@
           <option value="student">Student</option>
           <option value="other">Other</option>
         </select>
+                <input type="text" name="other-title" id="other-title" placeholder="Your Job Role" />
             </fieldset>
 
             <fieldset class="shirt">
@@ -45,32 +46,32 @@
                 <div>
                     <label for="size">Size:</label>
                     <select id="size" name="user_size">
-            <option value="small">S</option>
-            <option value="medium" selected>M</option>
-            <option value="large">L</option>
-            <option value="extra large">XL</option>
-          </select>
+                      <option value="small">S</option>
+                      <option value="medium" selected>M</option>
+                      <option value="large">L</option>
+                      <option value="extra large">XL</option>
+                    </select>
                 </div>
 
                 <div>
                     <label for="design">Design:</label>
                     <select id="design" name="user_design">
-            <option>Select Theme</option>
-            <option value="js puns">Theme - JS Puns</option>
-            <option value="heart js">Theme - I &#9829; JS</option>
-          </select>
+                      <option>Select Theme</option>
+                      <option value="js puns">Theme - JS Puns</option>
+                      <option value="heart js">Theme - I &#9829; JS</option>
+                    </select>
                 </div>
 
                 <div id="colors-js-puns" class="">
                     <label for="color">Color:</label>
                     <select id="color">
-            <option value="cornflowerblue">Cornflower Blue (JS Puns shirt only)</option>
-            <option value="darkslategrey">Dark Slate Grey (JS Puns shirt only)</option>
-            <option value="gold">Gold (JS Puns shirt only)</option>
-            <option value="tomato">Tomato (I &#9829; JS shirt only)</option>
-            <option value="steelblue">Steel Blue (I &#9829; JS shirt only)</option>
-            <option value="dimgrey">Dim Grey (I &#9829; JS shirt only)</option>
-          </select>
+                      <option value="cornflowerblue">Cornflower Blue (JS Puns shirt only)</option>
+                      <option value="darkslategrey">Dark Slate Grey (JS Puns shirt only)</option>
+                      <option value="gold">Gold (JS Puns shirt only)</option>
+                      <option value="tomato">Tomato (I &#9829; JS shirt only)</option>
+                      <option value="steelblue">Steel Blue (I &#9829; JS shirt only)</option>
+                      <option value="dimgrey">Dim Grey (I &#9829; JS shirt only)</option>
+                    </select>
                 </div>
             </fieldset>
 
@@ -138,21 +139,22 @@
           </select>
                 </div>
 
-                <div>
+                <div id="paypal">
                     <p>If you selected the PayPal option we'll take you to Paypal's site to set up your billing information, when you click “Register” below.</p>
                 </div>
 
-                <div>
+                <div id="bitcoin">
                     <p>If you selected the Bitcoin option we'll take you to the Coinbase site to set up your billing information. Due to the nature of exchanging Bitcoin, all Bitcoin transactions will be final.</p>
                 </div>
 
             </fieldset>
 
-            <button type="submit">Register</button>
+            <button type="submit" id="submit">Register</button>
 
         </form>
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+        <script src="./js/script.js"></script>
     </div>
 </body>
 
