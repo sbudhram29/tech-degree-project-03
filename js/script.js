@@ -6,6 +6,7 @@ $(function () {
     $('#name').focus();
     //
     const shirtColors = $("#color").children();
+    const heartUnicode = '\u2665';
     //hide payment option
     $('#credit-card').css({"display": "none"});
     $('#paypal').css({"display": "none"});
@@ -17,13 +18,39 @@ $(function () {
     */
     //handle t-shirt dropdowns
 
-    let filterTshirts = () => {
-        let filterShirts = shirtColors.filter((index, data) => data.innerText.search("Puns") !== -1)
-        filterShirts.each((index, shirt) => console.log(shirt.innerText))
+    const deselect = () => {
+        shirtColors.each((index, opt) => opt.selected = false);
+    };
+    const hide = () => {
+        shirtColors.map((index, data) => data.style.display = "none");
+    };
+
+    const filterTshirts = (filterBy) => {
+        deselect();
+        hide();
+
+        let searchWord;
+        switch(filterBy){
+            case 'js puns':
+            searchWord = "Puns";
+            break;
+            case 'heart js':
+            searchWord = heartUnicode;
+            break;
+            default:
+            return
+        }
+
+        let filterShirts = shirtColors.filter((index, data) => data.innerText.search(searchWord) !== -1)
+        filterShirts[0].selected = true;
+        filterShirts.each((index, shirt) => shirt.style.display = "");
     }
+
+    $('#design').on('change', (e) => {
+        filterTshirts(e.target.value);
+    });
     /*
     //handle activities checkboxes
-
     //handle payment dropdown
 
     //handle credit card validation
@@ -33,8 +60,7 @@ $(function () {
     //handle submit
     $('#submit').on('click', (e) => {
         e.preventDefault();
-        console.log(e.target.textContent);
-        console.log(filterTshirts());
+        filterTshirts(heartUnicode);
     });
 
     let random = () => Math.floor(Math.random() * 3 + 1);
