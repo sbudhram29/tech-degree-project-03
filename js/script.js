@@ -4,17 +4,61 @@ $(function () {
     $('#name').focus();
     //
     const shirtColors = $("#color").children();
+
     const paymentMethods = $('#payment')
         .parent()
         .children()
         .filter((index, data) => data.id !== 'payment' && data.id !== '');
-    const otherTitle = $('#other-title');
-    const heartUnicode = '\u2665';
 
+    const activities = $('.activities')
+        .children()
+        .filter((i, data) => data.firstChild.name);
+
+    const otherTitle = $('#other-title');
+
+    const heartUnicode = '\u2665';
+    let conferenceTotalCost = 0;
+
+    // add total to bottom of activities
+    activities
+        .parent()
+        .append(`<label id="total">Total: $${conferenceTotalCost}</label>`);
     /*
     //handle job role dropdown
-
     */
+
+    const activityInfo = {};
+    activities.each((index, data) => {
+
+        let name = data.firstChild.name;
+        let reCost = /\$(.*?)/;
+        let reTime = /\— (.*?)\,/;
+        let cost = data
+            .innerText
+            .split('$');
+
+        let time = data
+            .innerText
+            .match(reTime);
+
+        activityInfo[name] = {
+            name,
+            time: (time)
+                ? time[1]
+                : null,
+            cost: cost[1]
+        };
+    });
+
+    $(":checkbox").on('click', (e) => {
+        if (e.target.checked) {
+            conferenceTotalCost += parseInt(activityInfo[e.target.name].cost, 10);
+        } else {
+            conferenceTotalCost -= parseInt(activityInfo[e.target.name].cost, 10);
+        }
+        $("#total").html(`Total: $${conferenceTotalCost}`);
+    });
+
     //handle t-shirt dropdowns
     const filterBy = (searchWord) => shirtColors.filter((index, data) => data.innerText.search(searchWord) !== -1);
 
