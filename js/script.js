@@ -50,11 +50,27 @@ $(function () {
         };
     });
 
+    const isConflictingTime = (name) => {
+        let time = activityInfo[name].time;
+        activities.map((i, item) => {
+            if (item.firstChild.name !== name) {
+                if (activityInfo[item.firstChild.name].time === time) {
+                    let conflictingRef = $(`input[name="${item.firstChild.name}"]`);
+                    let isDisabled = conflictingRef.prop("disabled");
+                    conflictingRef.attr("disabled", !isDisabled);
+                }
+            }
+        })
+    };
+
     $(":checkbox").on('click', (e) => {
+        let name = e.target.name;
         if (e.target.checked) {
-            conferenceTotalCost += parseInt(activityInfo[e.target.name].cost, 10);
+            conferenceTotalCost += parseInt(activityInfo[name].cost, 10);
+            isConflictingTime(name);
         } else {
-            conferenceTotalCost -= parseInt(activityInfo[e.target.name].cost, 10);
+            conferenceTotalCost -= parseInt(activityInfo[name].cost, 10);
+            isConflictingTime(name);
         }
         $("#total").html(`Total: $${conferenceTotalCost}`);
     });
