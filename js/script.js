@@ -134,64 +134,39 @@ $(function () {
     */
 
     $('#name').on('blur', () => {
-        if ($('#name').val() === '') {
-            $('#name').addClass('invalid');
-        } else {
-            $('#name').removeClass('invalid');
-        }
+        validateName();
     });
 
     $('#other-title').on('blur', () => {
-        if ($('#other-title').val() === '') {
-            $('#other-title').addClass('invalid');
-        } else {
-            $('#other-title').removeClass('invalid');
-        }
+        validateOtherTitle();
     });
 
     $('#mail').on('blur', () => {
-        if ($('#mail').val() === '') {
-            $('#mail').addClass('invalid');
-        } else if ($('#mail').val().search('@') === -1) {
-            $('#mail').addClass('invalid');
-        } else {
-            $('#mail').removeClass('invalid');
-        }
+        validateEmail();
     });
 
     $('#cc-num').on('blur', () => {
-        if ($('#cc-num').val() === '') {
-            $('#cc-num').addClass('invalid');
-        } else if ($('#cc-num').val().length < 13 || $('#cc-num').val().length > 16) {
-            $('#cc-num').addClass('invalid');
-        } else if (isNaN($('#cc-num').val())) {
-            $('#cc-num').addClass('invalid');
-        } else {
-            $('#cc-num').removeClass('invalid');
-        }
+        vaildateCC();
     });
 
     $('#zip').on('blur', () => {
-        if ($('#zip').val() === '') {
-            $('#zip').addClass('invalid');
-        } else if ($('#zip').val().length !== 5) {
-            $('#zip').addClass('invalid');
-        } else if (isNaN($('#zip').val())) {
-            $('#zip').addClass('invalid');
-        } else {
-            $('#zip').removeClass('invalid');
-        }
+        validateZip();
     });
 
     $('#cvv').on('blur', () => {
-        if ($('#cvv').val() === '') {
-            $('#cvv').addClass('invalid');
-        } else if ($('#cvv').val().length !== 3) {
-            $('#cvv').addClass('invalid');
-        } else if (isNaN($('#cvv').val())) {
-            $('#cvv').addClass('invalid');
-        } else {
-            $('#cvv').removeClass('invalid');
+        validateCVV();
+    });
+
+    $('#submit').on('click', () => {
+        validateEmail();
+        validateName();
+        if ($('#title').val() === 'other') {
+            validateOtherTitle();
+        }
+        if ($('#payment').val() === 'credit-card') {
+            vaildateCC();
+            validateZip();
+            validateCVV();
         }
     });
     //hide payment methods on load
@@ -200,3 +175,65 @@ $(function () {
     //hide job role
     otherTitle.hide();
 });
+
+const validateName = () => {
+    if ($('#name').val() === '') {
+        $('#name').addClass('invalid');
+    } else {
+        $('#name').removeClass('invalid');
+    }
+};
+
+const validateOtherTitle = () => {
+    if ($('#other-title').val() === '') {
+        $('#other-title').addClass('invalid');
+    } else {
+        $('#other-title').removeClass('invalid');
+    }
+};
+
+function validateCVV() {
+    if ($('#cvv').val() === '') {
+        $('#cvv').addClass('invalid');
+    } else if ($('#cvv').val().length !== 3) {
+        $('#cvv').addClass('invalid');
+    } else if (isNaN($('#cvv').val())) {
+        $('#cvv').addClass('invalid');
+    } else {
+        $('#cvv').removeClass('invalid');
+    }
+}
+
+function validateZip() {
+    if ($('#zip').val() === '') {
+        $('#zip').addClass('invalid');
+    } else if ($('#zip').val().length !== 5) {
+        $('#zip').addClass('invalid');
+    } else if (isNaN($('#zip').val())) {
+        $('#zip').addClass('invalid');
+    } else {
+        $('#zip').removeClass('invalid');
+    }
+}
+
+function vaildateCC() {
+    if ($('#cc-num').val() === '') {
+        $('#cc-num').addClass('invalid');
+    } else if ($('#cc-num').val().length < 13 || $('#cc-num').val().length > 16) {
+        $('#cc-num').addClass('invalid');
+    } else if (isNaN($('#cc-num').val())) {
+        $('#cc-num').addClass('invalid');
+    } else {
+        $('#cc-num').removeClass('invalid');
+    }
+}
+
+function validateEmail() {
+    if ($('#mail').val() === '') {
+        $('#mail').addClass('invalid');
+    } else if ($('#mail').val().search('@') === -1) {
+        $('#mail').addClass('invalid');
+    } else {
+        $('#mail').removeClass('invalid');
+    }
+}
