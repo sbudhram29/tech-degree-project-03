@@ -129,6 +129,71 @@ $(function () {
         filterTshirts(heartUnicode);
     });
 
+    /*
+    Validation
+    */
+
+    $('#name').on('blur', () => {
+        if ($('#name').val() === '') {
+            $('#name').addClass('invalid');
+        } else {
+            $('#name').removeClass('invalid');
+        }
+    });
+
+    $('#other-title').on('blur', () => {
+        if ($('#other-title').val() === '') {
+            $('#other-title').addClass('invalid');
+        } else {
+            $('#other-title').removeClass('invalid');
+        }
+    });
+
+    $('#mail').on('blur', () => {
+        if ($('#mail').val() === '') {
+            $('#mail').addClass('invalid');
+        } else if ($('#mail').val().search('@') === -1) {
+            $('#mail').addClass('invalid');
+        } else {
+            $('#mail').removeClass('invalid');
+        }
+    });
+
+    $('#cc-num').on('blur', () => {
+        if ($('#cc-num').val() === '') {
+            $('#cc-num').addClass('invalid');
+        } else if ($('#cc-num').val().length < 13 || $('#cc-num').val().length > 16) {
+            $('#cc-num').addClass('invalid');
+        } else if (isNaN($('#cc-num').val())) {
+            $('#cc-num').addClass('invalid');
+        } else {
+            $('#cc-num').removeClass('invalid');
+        }
+    });
+
+    $('#zip').on('blur', () => {
+        if ($('#zip').val() === '') {
+            $('#zip').addClass('invalid');
+        } else if ($('#zip').val().length !== 5) {
+            $('#zip').addClass('invalid');
+        } else if (isNaN($('#zip').val())) {
+            $('#zip').addClass('invalid');
+        } else {
+            $('#zip').removeClass('invalid');
+        }
+    });
+
+    $('#cvv').on('blur', () => {
+        if ($('#cvv').val() === '') {
+            $('#cvv').addClass('invalid');
+        } else if ($('#cvv').val().length !== 3) {
+            $('#cvv').addClass('invalid');
+        } else if (isNaN($('#cvv').val())) {
+            $('#cvv').addClass('invalid');
+        } else {
+            $('#cvv').removeClass('invalid');
+        }
+    });
     //hide payment methods on load
     paymentMethods.hide();
     /**/
