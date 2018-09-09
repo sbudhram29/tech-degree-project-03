@@ -2,7 +2,8 @@
 $(function () {
     //set cursor to name on load
     $('#name').focus();
-    //
+    //add default color message
+    $('#color').before('<span id="color-message">Please select a T-shirt theme</span>');
     const shirtColors = $("#color").children();
 
     const paymentMethods = $('#payment')
@@ -18,6 +19,7 @@ $(function () {
 
     const heartUnicode = '\u2665';
     let conferenceTotalCost = 0;
+    let registeredActivities = 0;
 
     // add total to bottom of activities
     activities
@@ -67,9 +69,11 @@ $(function () {
         let name = e.target.name;
         if (e.target.checked) {
             conferenceTotalCost += parseInt(activityInfo[name].cost, 10);
+            registeredActivities += 1;
             isConflictingTime(name);
         } else {
             conferenceTotalCost -= parseInt(activityInfo[name].cost, 10);
+            registeredActivities -= 1;
             isConflictingTime(name);
         }
         $("#total").html(`Total: $${conferenceTotalCost}`);
@@ -79,7 +83,6 @@ $(function () {
     const filterBy = (searchWord) => shirtColors.filter((index, data) => data.innerText.search(searchWord) !== -1);
 
     const filterTshirts = (data) => {
-
         let shirts;
         switch (data) {
             case 'js puns':
@@ -89,6 +92,8 @@ $(function () {
                 shirts = filterBy(heartUnicode);
                 break;
             default:
+                $('#color').hide();
+                $('#color-message').show();
                 return
         }
 
@@ -98,36 +103,28 @@ $(function () {
 
     // t-shirt event handler
     $('#design').on('change', (e) => {
+        $('#color-message').hide();
+        $('#color').show();
         shirtColors.removeAttr('selected');
         shirtColors.hide();
         filterTshirts(e.target.value);
     });
+
     // payment event handler
     $('#payment').on('change', (e) => {
         paymentMethods.hide();
-        $('#payment')
-            .parent()
-            .children()
-            .filter((index, data) => data.id === e.target.value)
-            .show();
+        showSelectPayment(e.target.value);
     });
+
     // job event handler
     $('#title').on('change', (e) => {
         (e.target.value === 'other')
             ? otherTitle.show()
             : otherTitle.hide()
     });
-    /*
-    //handle activities checkboxes
-    //handle credit card validation
 
-    //handle all other validation
-    */
-    //handle submit
-    $('#submit').on('click', (e) => {
-        e.preventDefault();
-        filterTshirts(heartUnicode);
-    });
+    // handle submit $('#submit').on('click', (e) => {     e.preventDefault();
+    // filterTshirts(heartUnicode); });
 
     /*
     Validation
@@ -157,7 +154,9 @@ $(function () {
         validateCVV();
     });
 
-    $('#submit').on('click', () => {
+    $('#submit').on('click', (e) => {
+        e.preventDefault();
+        validateActivities(registeredActivities);
         validateEmail();
         validateName();
         if ($('#title').val() === 'other') {
@@ -171,26 +170,55 @@ $(function () {
     });
     //hide payment methods on load
     paymentMethods.hide();
+    $('#payment').children()[1].selected = true;
+    showSelectPayment('credit-card');
+
     /**/
     //hide job role
+    shirtColors.hide();
+    $('#color').hide();
+    shirtColors[0].selected = true;
+
     otherTitle.hide();
 });
 
-const validateName = () => {
+/*
+Name Validation
+*/
+function validateName() {
     if ($('#name').val() === '') {
         $('#name').addClass('invalid');
+        $('#name').before('<span class="error">Required</span>');
+
     } else {
         $('#name').removeClass('invalid');
     }
 };
 
-const validateOtherTitle = () => {
+/*
+Other Title Validation
+*/
+function validateOtherTitle() {
     if ($('#other-title').val() === '') {
         $('#other-title').addClass('invalid');
     } else {
         $('#other-title').removeClass('invalid');
     }
 };
+/*
+handle payment selection
+*/
+function showSelectPayment(type) {
+    $('#payment')
+        .parent()
+        .children()
+        .filter((index, data) => data.id === type)
+        .show();
+}
+
+/*
+credit card validation
+*/
 
 function validateCVV() {
     if ($('#cvv').val() === '') {
@@ -228,6 +256,10 @@ function vaildateCC() {
     }
 }
 
+/*
+Email validation
+*/
+
 function validateEmail() {
     if ($('#mail').val() === '') {
         $('#mail').addClass('invalid');
@@ -235,5 +267,17 @@ function validateEmail() {
         $('#mail').addClass('invalid');
     } else {
         $('#mail').removeClass('invalid');
+    }
+}
+
+/*
+Activitives Validation
+*/
+
+function validateActivities(numberOfActivities) {
+    if (numberOfActivities) {
+        console.log(numberOfActivities)
+    } else {
+        console.log('Please select at least one activity');
     }
 }
