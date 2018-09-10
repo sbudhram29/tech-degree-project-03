@@ -4,6 +4,7 @@ $(function () {
     $('#name').focus();
     //add default color message
     $('#color').before('<span id="color-message">Please select a T-shirt theme</span>');
+    //store ref to variable
     const shirtColors = $("#color").children();
 
     const paymentMethods = $('#payment')
@@ -17,17 +18,17 @@ $(function () {
 
     const otherTitle = $('#other-title');
 
+    //create local variables
     const heartUnicode = '\u2665';
+    //total cost
     let conferenceTotalCost = 0;
+    //registration counter
     let registeredActivities = 0;
 
     // add total to bottom of activities
     activities
         .parent()
         .append(`<label id="total">Total: $${conferenceTotalCost}</label>`);
-    /*
-    //handle job role dropdown
-    */
 
     const activityInfo = {};
     activities.each((index, data) => {
@@ -52,6 +53,7 @@ $(function () {
         };
     });
 
+    //check for any conflicting time
     const isConflictingTime = (name) => {
         let time = activityInfo[name].time;
         activities.map((i, item) => {
@@ -65,6 +67,7 @@ $(function () {
         })
     };
 
+    //handle checkbox
     $(":checkbox").on('click', (e) => {
         let name = e.target.name;
         if (e.target.checked) {
@@ -113,18 +116,21 @@ $(function () {
     // payment event handler
     $('#payment').on('change', (e) => {
         paymentMethods.hide();
+        //remove credit errors if payment type changes
+        removeError('cc');
+        removeError('zip');
+        removeError('cvv');
         showSelectPayment(e.target.value);
     });
 
     // job event handler
     $('#title').on('change', (e) => {
+        //remove othter title error on change
+        removeError('other-title');
         (e.target.value === 'other')
             ? otherTitle.show()
             : otherTitle.hide()
     });
-
-    // handle submit $('#submit').on('click', (e) => {     e.preventDefault();
-    // filterTshirts(heartUnicode); });
 
     /*
     Validation
@@ -167,47 +173,65 @@ $(function () {
             validateZip();
             validateCVV();
         }
+
+        if (!errors.length) {
+            location.reload();
+        }
     });
     //hide payment methods on load
     paymentMethods.hide();
     $('#payment').children()[1].selected = true;
     showSelectPayment('credit-card');
-
-    /**/
     //hide job role
     shirtColors.hide();
     $('#color').hide();
     shirtColors[0].selected = true;
-
+    //hide other title
     otherTitle.hide();
 });
 
+let errors = [];
+
+function removeError(errorName) {
+    let index = errors.indexOf(errorName);
+    if (index > -1) {
+        errors.splice(index, 1);
+    }
+}
 /*
 Name Validation
 */
+
 function validateName() {
+    $('#name').removeClass('invalid');
+    $('#nameError').remove();
+    removeError('name');
+
     if ($('#name').val() === '') {
         $('#name').addClass('invalid');
-        $('#name').before('<span class="error">Required</span>');
+        $('#name').before('<span id="nameError" class="error">Required</span>');
 
-    } else {
-        $('#name').removeClass('invalid');
+        errors.push('name');
     }
 };
 
 /*
 Other Title Validation
 */
+
 function validateOtherTitle() {
+    $('#other-title').removeClass('invalid');
+    removeError('other-title');
     if ($('#other-title').val() === '') {
         $('#other-title').addClass('invalid');
-    } else {
-        $('#other-title').removeClass('invalid');
+        errors.push('other-title');
     }
 };
+
 /*
 handle payment selection
 */
+
 function showSelectPayment(type) {
     $('#payment')
         .parent()
@@ -221,38 +245,50 @@ credit card validation
 */
 
 function validateCVV() {
+    $('#cvv').removeClass('invalid');
+
+    removeError('cvv');
     if ($('#cvv').val() === '') {
         $('#cvv').addClass('invalid');
+        errors.push('cvv');
     } else if ($('#cvv').val().length !== 3) {
         $('#cvv').addClass('invalid');
+        errors.push('cvv');
     } else if (isNaN($('#cvv').val())) {
         $('#cvv').addClass('invalid');
-    } else {
-        $('#cvv').removeClass('invalid');
+        errors.push('cvv');
     }
 }
 
 function validateZip() {
+    $('#zip').removeClass('invalid');
+
+    removeError('zip');
     if ($('#zip').val() === '') {
         $('#zip').addClass('invalid');
+        errors.push('zip');
     } else if ($('#zip').val().length !== 5) {
         $('#zip').addClass('invalid');
+        errors.push('zip');
     } else if (isNaN($('#zip').val())) {
         $('#zip').addClass('invalid');
-    } else {
-        $('#zip').removeClass('invalid');
+        errors.push('zip');
     }
 }
 
 function vaildateCC() {
+    $('#cc-num').removeClass('invalid');
+
+    removeError('cc');
     if ($('#cc-num').val() === '') {
         $('#cc-num').addClass('invalid');
+        errors.push('cc');
     } else if ($('#cc-num').val().length < 13 || $('#cc-num').val().length > 16) {
         $('#cc-num').addClass('invalid');
+        errors.push('cc');
     } else if (isNaN($('#cc-num').val())) {
         $('#cc-num').addClass('invalid');
-    } else {
-        $('#cc-num').removeClass('invalid');
+        errors.push('cc');
     }
 }
 
@@ -261,12 +297,18 @@ Email validation
 */
 
 function validateEmail() {
+    $('#mail').removeClass('invalid');
+    $('#mailError').remove();
+    removeError('email');
     if ($('#mail').val() === '') {
         $('#mail').addClass('invalid');
+        errors.push('email');
+        $('#mail').before('<span id="mailError" class="error">Required</span>');
     } else if ($('#mail').val().search('@') === -1) {
         $('#mail').addClass('invalid');
-    } else {
-        $('#mail').removeClass('invalid');
+        errors.push('email');
+        $('#mail').before('<span id="mailError" class="error">Please end a full email jdoe@example.com</spa' +
+                'n>');
     }
 }
 
@@ -275,9 +317,12 @@ Activitives Validation
 */
 
 function validateActivities(numberOfActivities) {
-    if (numberOfActivities) {
-        console.log(numberOfActivities)
-    } else {
-        console.log('Please select at least one activity');
+    $('#activityError').remove();
+    removeError('activity');
+    if (!numberOfActivities) {
+        errors.push('activity');
+        $('.activities')
+            .find('legend')
+            .after('<span id="activityError" class="error">Please select at least 1 activity</span>');
     }
 }
