@@ -144,7 +144,7 @@ $(function () {
         validateOtherTitle();
     });
 
-    $('#mail').on('blur', () => {
+    $('#mail').on('keyup', () => {
         validateEmail();
     });
 
@@ -298,6 +298,7 @@ Email validation
 
 function validateEmail() {
     $('#mail').removeClass('invalid');
+    $('#mail').removeClass('valid');
     $('#mailError').remove();
     removeError('email');
     if ($('#mail').val() === '') {
@@ -309,6 +310,8 @@ function validateEmail() {
         errors.push('email');
         $('#mail').before('<span id="mailError" class="error">Please end a full email jdoe@example.com</spa' +
                 'n>');
+    } else {
+        $('#mail').addClass('valid');
     }
 }
 
