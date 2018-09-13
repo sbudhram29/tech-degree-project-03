@@ -172,6 +172,10 @@ $(function () {
             vaildateCC();
             validateZip();
             validateCVV();
+
+            let month = parseInt($('#exp-month').val(), 10);
+            let year = parseInt($('#exp-year').val(), 10);
+            validateExpirationDate(month, year);
         }
 
         if (!errors.length) {
@@ -180,6 +184,7 @@ $(function () {
     });
     //hide payment methods on load
     paymentMethods.hide();
+    $('#payment').children()[0].disabled = true;
     $('#payment').children()[1].selected = true;
     showSelectPayment('credit-card');
     //hide job role
@@ -246,48 +251,59 @@ credit card validation
 
 function validateCVV() {
     $('#cvv').removeClass('invalid');
+    $('#cvvError').remove();
 
     removeError('cvv');
     if ($('#cvv').val() === '') {
         $('#cvv').addClass('invalid');
-        errors.push('cvv');
-    } else if ($('#cvv').val().length !== 3) {
-        $('#cvv').addClass('invalid');
+        $('#cvv').before('<span id="cvvError" class="error">CVV needed</span>');
         errors.push('cvv');
     } else if (isNaN($('#cvv').val())) {
         $('#cvv').addClass('invalid');
+        $('#cvv').before('<span id="cvvError" class="error">Numbers only</span>');
+        errors.push('cvv');
+    } else if ($('#cvv').val().length !== 3) {
+        $('#cvv').addClass('invalid');
+        $('#cvv').before('<span id="cvvError" class="error">Must be 3 digits long</span>');
         errors.push('cvv');
     }
 }
 
 function validateZip() {
     $('#zip').removeClass('invalid');
-
+    $('#ZipError').remove();
     removeError('zip');
     if ($('#zip').val() === '') {
         $('#zip').addClass('invalid');
-        errors.push('zip');
-    } else if ($('#zip').val().length !== 5) {
-        $('#zip').addClass('invalid');
+        $('#zip').before('<span id="ZipError" class="error">Zip Needed</span>');
         errors.push('zip');
     } else if (isNaN($('#zip').val())) {
         $('#zip').addClass('invalid');
+        $('#zip').before('<span id="ZipError" class="error">Numbers only</span>');
+        errors.push('zip');
+    } else if ($('#zip').val().length !== 5) {
+        $('#zip').addClass('invalid');
+        $('#zip').before('<span id="ZipError" class="error">Must be 5 digits long</span>');
         errors.push('zip');
     }
 }
 
 function vaildateCC() {
     $('#cc-num').removeClass('invalid');
+    $('#CCError').remove();
 
     removeError('cc');
     if ($('#cc-num').val() === '') {
         $('#cc-num').addClass('invalid');
-        errors.push('cc');
-    } else if ($('#cc-num').val().length < 13 || $('#cc-num').val().length > 16) {
-        $('#cc-num').addClass('invalid');
+        $('#cc-num').before('<span id="CCError" class="error">Please enter Credit Card Number</span>');
         errors.push('cc');
     } else if (isNaN($('#cc-num').val())) {
         $('#cc-num').addClass('invalid');
+        $('#cc-num').before('<span id="CCError" class="error">Numbers only</span>');
+        errors.push('cc');
+    } else if ($('#cc-num').val().length < 13 || $('#cc-num').val().length > 16) {
+        $('#cc-num').addClass('invalid');
+        $('#cc-num').before('<span id="CCError" class="error">Credit Card needs to be 13-16 Digits</span>');
         errors.push('cc');
     }
 }
@@ -327,5 +343,23 @@ function validateActivities(numberOfActivities) {
         $('.activities')
             .find('legend')
             .after('<span id="activityError" class="error">Please select at least 1 activity</span>');
+    }
+}
+
+/*
+Validated Expiration Date
+Check to make sure that expiration date is not before
+current month and year
+*/
+
+function validateExpirationDate(month, year) {
+    $('#expError').remove();
+    removeError('activity');
+    let currentMonth = (new Date()).getMonth();
+    let currentYear = (new Date()).getFullYear();
+    if (month < currentMonth && year <= currentYear) {
+        errors.push('date');
+        $('#exp-month').before('<span id="expError" class="error">Please provide a valid Credit Card. Please che' +
+                'ck date.</span>');
     }
 }

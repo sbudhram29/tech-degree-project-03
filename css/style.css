@@ -165,6 +165,7 @@ button:hover {
 
 .error {
     width: 100%;
+    display: block;
     padding: 0;
     font-size: 80%;
     color: white;
@@ -203,5 +204,8 @@ button:hover {
     }
     .col-6 {
         width: 49%;
+    }
+    .col-12 {
+        width: 99%;
     }
 }
